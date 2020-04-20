@@ -8,6 +8,7 @@ struct Fives : Module {
 		NUM_PARAMS
 	};
 	enum InputIds {
+        RESET_INPUT,
 		NUM_INPUTS
 	};
 	enum OutputIds {
@@ -36,6 +37,8 @@ struct Fives : Module {
     }
 };
 
+// Inkscape's coordinate system is backwards!
+#define MODULE_HEIGHT 128.5
 
 struct FivesWidget : ModuleWidget {
 	FivesWidget(Fives* module) {
@@ -47,10 +50,11 @@ struct FivesWidget : ModuleWidget {
 		addChild(createWidget<ScrewSilver>(Vec(RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
 		addChild(createWidget<ScrewSilver>(Vec(box.size.x - 2 * RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
 
-		addParam(createParamCentered<RoundBlackKnob>(mm2px(Vec(25.527, 28.753)), module, Fives::ON_PARAM));
-		addParam(createParamCentered<RoundBlackKnob>(mm2px(Vec(26.539, 52.481)), module, Fives::OFF_PARAM));
+		addParam(createParamCentered<RoundBlackKnob>(mm2px(Vec(12.7, MODULE_HEIGHT - 113.5)), module, Fives::ON_PARAM));
+		addParam(createParamCentered<RoundBlackKnob>(mm2px(Vec(12.7, MODULE_HEIGHT - 96.5)), module, Fives::OFF_PARAM));
 
-		addOutput(createOutputCentered<PJ301MPort>(mm2px(Vec(36.885, 101.286)), module, Fives::OUT_OUTPUT));
+		addInput(createInputCentered<PJ301MPort>(mm2px(Vec(12.7, MODULE_HEIGHT - 59.0)), module, Fives::OUT_OUTPUT));
+		addOutput(createOutputCentered<PJ301MPort>(mm2px(Vec(12.7, MODULE_HEIGHT - 31.5)), module, Fives::OUT_OUTPUT));
 	}
 };
 
