@@ -1,6 +1,6 @@
 {
-  "slug": "Fives",
-  "name": "Fives",
+  "slug": "NoraCodes",
+  "name": "NoraCodes",
   "version": "1.0.0",
   "license": "ISC",
   "brand": "NoraCodes",
@@ -14,12 +14,13 @@
   "changelogUrl": "",
   "modules": [
     {
-      "slug": "Fives",
-      "name": "Fives",
-      "description": "Simple astable-mode 555 timers.",
+      "slug": "NoraCodes_FivesAstable",
+      "name": "Fives Astable",
+      "description": "Astable-mode 555 oscillator",
       "tags": [
-        "Clock",
-        "Oscillator"
+        "Clock generator",
+        "Oscillator",
+        "Physical modelling"
       ]
     }
   ]
