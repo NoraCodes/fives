@@ -28,8 +28,7 @@ and a RESET input which, when above 5 volts, kills the output.
 The total period of oscillation is the on time plus the off time; there is no single
 frequency control.
 
-Fives Astable models the rise and fall times of a real LM555 as closely as possible.
-
 The 555 timer in Fives Astable is in a typical 555 astable configuration,
 using a 100uF capacitor.
-Each knob is modelled as a single 10k potentiometer with a 10 Ohm potentiometer in series.
+Each knob is modelled as a single 10k potentiometer with a small resistor in series.
+

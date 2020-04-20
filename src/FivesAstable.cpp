@@ -30,8 +30,8 @@ struct FivesAstable : Module {
 
 	FivesAstable() {
 		config(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS);
-		configParam(ON_PARAM, 0.f, 1.f, 0.f, "");
-		configParam(OFF_PARAM, 0.f, 1.f, 0.f, "");
+		configParam(ON_PARAM, 0.f, 1.f, 0.5, "On Time");
+		configParam(OFF_PARAM, 0.f, 1.f, 0.5, "Off Time");
         chip = new AstableChipModel(10, 10, 100e-6);
 	}
 
@@ -62,7 +62,7 @@ struct FivesAstableWidget : ModuleWidget {
 		addParam(createParamCentered<RoundBlackKnob>(mm2px(Vec(12.7, MODULE_HEIGHT - 113.5)), module,FivesAstable::ON_PARAM));
 		addParam(createParamCentered<RoundBlackKnob>(mm2px(Vec(12.7, MODULE_HEIGHT - 96.5)), module, FivesAstable::OFF_PARAM));
 
-		addInput(createInputCentered<PJ301MPort>(mm2px(Vec(12.7, MODULE_HEIGHT - 65.0)), module, FivesAstable::OUT_OUTPUT));
+		addInput(createInputCentered<PJ301MPort>(mm2px(Vec(12.7, MODULE_HEIGHT - 65.0)), module, FivesAstable::RESET_INPUT));
 		addOutput(createOutputCentered<PJ301MPort>(mm2px(Vec(12.7, MODULE_HEIGHT - 37.0)), module, FivesAstable::OUT_OUTPUT));
 	}
 };
