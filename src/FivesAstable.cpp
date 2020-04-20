@@ -1,4 +1,5 @@
 #include "plugin.hpp"
+#include "AstableChipModel.hpp"
 
 
 struct FivesAstable : Module {
@@ -25,78 +26,23 @@ struct FivesAstable : Module {
         FALLING
     };
 
-    State state = OFF;
-    float timeInState = 0.f; // Seconds
-    float capacitorValue = 0.000100; // Farads
-    float tRise = 0.0000001; // Typical - from TI datasheet for LM555
-    float tFall = 0.0000001; // Typical - from TI datasheet for LM555
+    AstableChipModel* chip;
 
 	FivesAstable() {
 		config(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS);
 		configParam(ON_PARAM, 0.f, 1.f, 0.f, "");
 		configParam(OFF_PARAM, 0.f, 1.f, 0.f, "");
+        chip = new AstableChipModel(10, 10, 100e-6);
 	}
 
-    void advanceState() {
-        if (state == OFF) {
-            state = RISING;
-        } else if (state == RISING) {
-            state = ON;
-        } else if (state == ON) {
-            state = FALLING;
-        } else if (state == FALLING) {
-            state = OFF;
-        }
-    }
-
     void process(const ProcessArgs &args) override {
-        float onResistor = log(params[ON_PARAM].getValue() + 1.f) * 10000.f + 5.f; // Ohms; a potentiometer
-        float offResistor = log(params[OFF_PARAM].getValue() + 1.f) * 10000.f + 15.f; // Ohms; a potentiometer
-        float vReset = inputs[RESET_INPUT].getVoltage();
-        bool resetting = vReset >= 4.85;
+        chip->resistorOne = log(params[ON_PARAM].getValue() + 1.f) * 10000.f + 5.f; // Ohms; a potentiometer
+        chip->resistorTwo = log(params[OFF_PARAM].getValue() + 1.f) * 10000.f + 15.f; // Ohms; a potentiometer
+        chip->vReset = inputs[RESET_INPUT].getVoltage(); 
+        
+        chip->update(args.sampleTime);
 
-        // How long we should stay in the current state
-        float tState = tRise;
-        if (state == ON) {
-            tState = log(2.f) * (onResistor + offResistor) * capacitorValue;
-        } else if (state == OFF) {
-            tState = log(2.f) * (offResistor) * capacitorValue;
-        } else if (state == RISING || state == FALLING) {
-            tState = tRise;
-        }
-
-        timeInState += args.sampleTime;
-        if (resetting) {
-            // Reset instantly changes the ON or RISING states to FALLING
-            if (state == ON) {
-                state = FALLING;
-                timeInState = 0.f;
-            } else if (state == RISING) {
-                state = FALLING;
-                timeInState = clamp(tState - timeInState, 0.f, tState);
-            }
-        }
-
-        // Change state if we're out of time, but not if already off and held there.
-        if (timeInState >= tState & !(resetting && state == OFF)) {
-            advanceState();
-            timeInState = 0.f;
-        }
-
-        float vOut = 0.f;
-        if (state == ON) {
-            vOut = 10.f;
-        } else if (state == OFF) {
-            vOut = 0.f;
-        } else if (state == RISING) {
-            float pDone = clamp(timeInState, 0.f, tState) / tState; 
-            vOut = pDone * 10.f;
-        } else if (state == FALLING) {
-            float pDone = 1 - (clamp(timeInState, 0.f, tState) / tState); 
-            vOut = pDone * 10.f;
-        }
-
-        outputs[OUT_OUTPUT].setVoltage(clamp(vOut, -1.f, 10.f));
+        outputs[OUT_OUTPUT].setVoltage(clamp(chip->vOut, -1.f, 10.f));
     }
 };
 
