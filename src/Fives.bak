@@ -1,0 +1,51 @@
+#include "plugin.hpp"
+
+
+struct Fives : Module {
+	enum ParamIds {
+		NUM_PARAMS
+	};
+	enum InputIds {
+		NUM_INPUTS
+	};
+	enum OutputIds {
+		NUM_OUTPUTS
+	};
+	enum LightIds {
+		NUM_LIGHTS
+	};
+
+	Fives() {
+		config(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS);
+	}
+
+	void process(const ProcessArgs& args) override {
+	}
+};
+
+
+struct FivesWidget : ModuleWidget {
+    float phase = 0.f;
+
+	FivesWidget(Fives* module) {
+		setModule(module);
+		setPanel(APP->window->loadSvg(asset::plugin(pluginInstance, "res/Fives.svg")));
+
+		addChild(createWidget<ScrewSilver>(Vec(RACK_GRID_WIDTH, 0)));
+		addChild(createWidget<ScrewSilver>(Vec(box.size.x - 2 * RACK_GRID_WIDTH, 0)));
+		addChild(createWidget<ScrewSilver>(Vec(RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
+		addChild(createWidget<ScrewSilver>(Vec(box.size.x - 2 * RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
+	}
+
+    void process(const ProcessArgs &args) override {
+        float onTime = params[ONTIMEKNOB_PARAM].getValue();
+        clamp(onTime, -4.f, 4.f);
+        phase += freq * args.sampleTime;
+        if (phase > 0.5f) phase -= 1.f;
+        float sine = std::sin(2.f * M_PI * phase);
+        outputs[OUTJACK_OUTPUT].setVoltage(5f * sine);
+    }
+};
+
+
+Model* modelFives = createModel<Fives, FivesWidget>("Fives");

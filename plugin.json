@@ -1,0 +1,26 @@
+{
+  "slug": "Fives",
+  "name": "Fives",
+  "version": "0.1.0",
+  "license": "ISC",
+  "brand": "NoraCodes",
+  "author": "Leonora Tindall",
+  "authorEmail": "nora@nora.codes",
+  "authorUrl": "https://nora.codes",
+  "pluginUrl": "",
+  "manualUrl": "",
+  "sourceUrl": "",
+  "donateUrl": "",
+  "changelogUrl": "",
+  "modules": [
+    {
+      "slug": "Fives",
+      "name": "Fives",
+      "description": "Simple astable-mode 555 timers.",
+      "tags": [
+        "Clock",
+        "Oscillator"
+      ]
+    }
+  ]
+}
