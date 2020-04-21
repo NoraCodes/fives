@@ -1,4 +1,5 @@
 #include "plugin.hpp"
+#include "util.hpp"
 #include "AstableChipModel.hpp"
 
 
@@ -36,8 +37,8 @@ struct FivesAstable : Module {
 	}
 
     void process(const ProcessArgs &args) override {
-        chip->resistorOne = log(params[ON_PARAM].getValue() + 1.f) * 10000.f + 5.f; // Ohms; a potentiometer
-        chip->resistorTwo = log(params[OFF_PARAM].getValue() + 1.f) * 10000.f + 15.f; // Ohms; a potentiometer
+        chip->resistorOne = log_scale_param(params[ON_PARAM].getValue()) * 10000.f + 5.f; // Ohms; a potentiometer
+        chip->resistorTwo = log_scale_param(params[OFF_PARAM].getValue()) * 10000.f + 15.f; // Ohms; a potentiometer
         chip->vReset = inputs[RESET_INPUT].getVoltage(); 
         
         chip->update(args.sampleTime);

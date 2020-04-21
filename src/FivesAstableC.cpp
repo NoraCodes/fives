@@ -1,6 +1,6 @@
 #include "plugin.hpp"
+#include "util.hpp"
 #include "AstableChipModel.hpp"
-
 
 struct FivesAstableC : Module {
 	enum ParamIds {
@@ -42,22 +42,21 @@ struct FivesAstableC : Module {
 
     void process(const ProcessArgs &args) override {
         if (inputs[ON_INPUT].isConnected()) {
-            chip->resistorOne = log(clamp(inputs[ON_INPUT].getVoltage(), 0.f, 10.f) + 1.f) * 10000.f + 5.f;
+            chip->resistorOne = log_scale_volts(inputs[ON_INPUT].getVoltage()) * 10000.f + 5.f;
         } else {
-            chip->resistorOne = log(params[ON_PARAM].getValue() + 1.f) * 10000.f + 5.f; // Ohms; a potentiometer
+            chip->resistorOne = log_scale_param(params[ON_PARAM].getValue()) * 10000.f + 5.f; // Ohms; a potentiometer
         }
 
         if (inputs[OFF_INPUT].isConnected()) {
-            chip->resistorTwo = log(clamp(inputs[ON_INPUT].getVoltage(), 0.f, 10.f) + 1.f) * 10000.f + 15.f;
+            chip->resistorTwo = log_scale_volts(inputs[ON_INPUT].getVoltage()) * 10000.f + 15.f;
         } else {
-            chip->resistorTwo = log(params[OFF_PARAM].getValue() + 1.f) * 10000.f + 15.f; // Ohms; a potentiometer
+            chip->resistorTwo = log_scale_param(params[OFF_PARAM].getValue()) * 10000.f + 15.f; // Ohms; a potentiometer
         }
 
         if (inputs[PERIOD_INPUT].isConnected()) {
-            chip->capacitor = log(clamp(inputs[ON_INPUT].getVoltage(), 0.1, 10.f) + 1.f) * 100e-7;
-            //WARN("cap value is %f", chip->capacitor);
+            chip->capacitor = log_scale_volts(inputs[PERIOD_INPUT].getVoltage()) * 100e-6 + 10e-6;
         } else {
-            chip->capacitor = log(params[PERIOD_PARAM].getValue() + 1.f) * 500e-6 + 10e-6; // Farads; a varicap
+            chip->capacitor = log_scale_param(params[PERIOD_PARAM].getValue()) * 500e-6 + 10e-6; // Farads; a varicap
         }
 
         if (inputs[RESET_INPUT].isConnected()) {
