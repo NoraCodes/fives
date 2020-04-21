@@ -1,9 +1,12 @@
 # Fives
-VCVRack modules by NoraCodes
+## VCVRack modules by NoraCodes
 
 **Fives** is a collection of modules based on the specified physical operation of the
-world's most popular integrated circuit: the LM555 multimode timer.
+world's most popular integrated circuit: the **LM555 multimode timer**.
 
+![The Fives Astable and Fives Astable C next to each other.](res/lineup.png)
+
+### Why 555?
 
 The 555 isn't generally used as an oscillator in modular instruments because, while it can
 easily run in astable mode and generate a clean square wave with a variable duty cycle,
@@ -17,7 +20,7 @@ So, Fives provides modules that closely model what a real 555-based module would
 as well as modules that apply the power of CV and impossibly accurate and fast variable
 capacitors to the same mathematical model.
 
-## Fives Astable
+### Fives Astable
 
 Fives Astable is a clock generator based on a physical model of the LM555 timer chip.
 It has two knobs - ON and OFF - which control the high and low time of the oscillator,
@@ -32,7 +35,7 @@ The 555 timer in Fives Astable is in a typical 555 astable configuration,
 using a 100uF capacitor.
 Each knob is modelled as a single 10k potentiometer with a small resistor in series.
 
-## Fives Astable C
+### Fives Astable C
 
 The Fives Astable C extends the slimmer, simpler Fives Astable with a variable capacitor
 and CV inputs for the ON, OFF, and PERIOD inputs. The added PERIOD variable capacitor
