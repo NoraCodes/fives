@@ -43,5 +43,6 @@ ranges logarithmically from 10uF to 400uF.
 
 ![A Fives Astable C and a Fives Astable, showing the use of the PERIOD parameter.](res/astable-c-sample.png)
 
-CV applied to the inputs overrides the knob parameters. Negative voltages are disregarded. 
+CV applied to the inputs are scaled by the knob parameters.
+Negative voltages are disregarded. 
 
