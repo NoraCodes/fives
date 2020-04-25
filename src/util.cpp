@@ -35,11 +35,11 @@ float log_scale_volts_param(float voltage, float param) {
 
 // Map a value between 0 and 1 to between 0.1 and 10, exponential
 float exp_param_factor(float x) {
-    return exp(10f, 3.f * x * 2.f);
+    return pow(10.f, 3.f * x - 2.f);
 }
 
 // Map a value between 0 and 1 to between 10 and 0.1, exponential
 float exp_param_factor_inverted(float x) {
-    return exp(10f, 3.f * 1 - x * 2.f);
+    return exp_param_factor(1.f - x);
 }
 
