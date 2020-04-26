@@ -43,3 +43,12 @@ float exp_param_factor_inverted(float x) {
     return exp_param_factor(1.f - x);
 }
 
+// Map a value from -10 to 10 to between 0 and 1, linear
+float lin_scale_cv(float x) {
+    return (x + 10.f) / 20.f;
+}
+
+// 1V/Oct from voltage
+float exp_cv_tone(float x) {
+    return pow(2, x);
+}

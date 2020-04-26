@@ -2,6 +2,9 @@
 #include "util.hpp"
 #include "AstableChipModel.hpp"
 
+#define DEFAULT_R1 5000.f
+#define DEFAULT_R2 5000.f
+#define DEFAULT_C1 100e-6
 
 struct FivesAstable : Module {
 	enum ParamIds {
@@ -31,14 +34,14 @@ struct FivesAstable : Module {
 
 	FivesAstable() {
 		config(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS);
-		configParam(ON_PARAM, 0.f, 1.f, 0.5, "On Time");
-		configParam(OFF_PARAM, 0.f, 1.f, 0.5, "Off Time");
-        chip = new AstableChipModel(10, 10, 100e-6);
+		configParam(ON_PARAM, 0.f, 1.f, 0.333, "On Time");
+		configParam(OFF_PARAM, 0.f, 1.f, 0.333, "Off Time");
+        chip = new AstableChipModel(DEFAULT_R1, DEFAULT_R2, DEFAULT_C1);
 	}
 
     void process(const ProcessArgs &args) override {
-        chip->resistorOne = log_scale_param(params[ON_PARAM].getValue()) * 10000.f + 5.f; // Ohms; a potentiometer
-        chip->resistorTwo = log_scale_param(params[OFF_PARAM].getValue()) * 10000.f + 15.f; // Ohms; a potentiometer
+        chip->resistorOne = exp_param_factor_inverted(params[ON_PARAM].getValue()) * DEFAULT_R1; // Ohms; a potentiometer
+        chip->resistorTwo = exp_param_factor_inverted(params[OFF_PARAM].getValue()) * DEFAULT_R2; // Ohms; a potentiometer
         chip->vReset = inputs[RESET_INPUT].getVoltage(); 
         
         chip->update(args.sampleTime);
