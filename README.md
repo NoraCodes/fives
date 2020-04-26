@@ -22,27 +22,28 @@ capacitors to the same mathematical model.
 
 ### Fives Astable
 
-Fives Astable is a clock generator based on a physical model of the LM555 timer chip.
+Fives Astable is a low-frequency oscillator and clock generator based on a
+physical model of the LM555 timer chip in an astable configuration.
 It has two knobs - ON and OFF - which control the high and low time of the oscillator,
 and a RESET input which, when above 5 volts, kills the output.
 
 ![Two Fives Astable modules, one resetting the other.](res/astable-sample.png)
 
 The total period of oscillation is the on time plus the off time; there is no single
-frequency control.
-
-The 555 timer in Fives Astable is in a typical 555 astable configuration,
-using a 100uF capacitor.
-Each knob is modelled as a single 10k potentiometer with a small resistor in series.
+frequency control. It can oscillate as quickly as 9 Hz and as slowly as 0.1Hz
+(once every 10 seconds) with a duty cycle around 66%.
 
 ### Fives Astable C
 
-The Fives Astable C extends the slimmer, simpler Fives Astable with a variable capacitor
-and CV inputs for the ON, OFF, and PERIOD inputs. The added PERIOD variable capacitor
-ranges logarithmically from 10uF to 400uF.
+The Fives Astable C is a voltage-controlled audio-rate oscillator which extends the slimmer,
+simpler Fives Astable with a variable capacitor and CV inputs for the ON, OFF, and PERIOD inputs.
+The added PERIOD variable capacitor allows the Fives Astable C to oscillate as quickly as 2.6 kHz
+or as slowly as 26 Hz, with a duty cycle as low as 56.5%.
+
+It is tuned to take 1V/Oct input on the PERIOD input by default, with all parameter knobs at 33.3%.
+Modifying any of the parameters will detune the module, but that can be fun too.
 
 ![A Fives Astable C and a Fives Astable, showing the use of the PERIOD parameter.](res/astable-c-sample.png)
 
 CV applied to the inputs are scaled by the knob parameters.
-Negative voltages are disregarded. 
 
