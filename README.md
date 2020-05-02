@@ -33,6 +33,8 @@ The total period of oscillation is the on time plus the off time; there is no si
 frequency control. It can oscillate as quickly as 9 Hz and as slowly as 0.1Hz
 (once every 10 seconds) with a duty cycle around 66%.
 
+The UNI/BI toggle transposes the waveform from 0v to 10v (default) to -5v to 5v (BI mode).
+
 ### Fives Astable C
 
 The Fives Astable C is a voltage-controlled audio-rate oscillator which extends the slimmer,
