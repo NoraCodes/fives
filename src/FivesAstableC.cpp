@@ -11,6 +11,7 @@ struct FivesAstableC : Module {
 		ON_PARAM,
 		OFF_PARAM,
         PERIOD_PARAM,
+        OFFSET_PARAM,
 		NUM_PARAMS
 	};
 	enum InputIds {
@@ -41,6 +42,7 @@ struct FivesAstableC : Module {
         configParam(ON_PARAM, 0.f, 1.f, 0.333, "On Time");
 		configParam(OFF_PARAM, 0.f, 1.f, 0.333, "Off Time");
 		configParam(PERIOD_PARAM, 0.f, 1.f, 0.333, "Period");
+		configParam(OFFSET_PARAM, 0.f, 1.f, 0.f, "Voltage Offset");
         chip = new AstableChipModel(DEFAULT_R1, DEFAULT_R2, DEFAULT_C1);
 	}
 
@@ -66,10 +68,10 @@ struct FivesAstableC : Module {
         if (inputs[RESET_INPUT].isConnected()) {
             chip->vReset = inputs[RESET_INPUT].getVoltage(); 
         }
-        
-        chip->update(args.sampleTime);
 
-        outputs[OUT_OUTPUT].setVoltage(clamp(chip->vOut, -1.f, 10.f));
+        chip->update(args.sampleTime);
+        float offsetVout = chip->vOut + (-5.f * params[OFFSET_PARAM].getValue());
+        outputs[OUT_OUTPUT].setVoltage(clamp(offsetVout, -10.f, 10.f));
     }
 };
 
@@ -86,11 +88,12 @@ struct FivesAstableCWidget : ModuleWidget {
 		addChild(createWidget<ScrewSilver>(Vec(RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
 		addChild(createWidget<ScrewSilver>(Vec(box.size.x - 2 * RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
 
-		addParam(createParamCentered<RoundBlackKnob>(mm2px(Vec(11.0, MODULE_HEIGHT - 115.0)), module,FivesAstableC::ON_PARAM));
-		addParam(createParamCentered<RoundBlackKnob>(mm2px(Vec(30.0, MODULE_HEIGHT - 115.0)), module, FivesAstableC::OFF_PARAM));
+		addParam(createParamCentered<RoundBlackKnob>(mm2px(Vec(11.0, MODULE_HEIGHT - 117.0)), module,FivesAstableC::ON_PARAM));
+		addParam(createParamCentered<RoundBlackKnob>(mm2px(Vec(30.0, MODULE_HEIGHT - 117.0)), module, FivesAstableC::OFF_PARAM));
 		addInput(createInputCentered<PJ301MPort>(mm2px(Vec(11.0, MODULE_HEIGHT - 94.0)), module, FivesAstableC::ON_INPUT));
 		addInput(createInputCentered<PJ301MPort>(mm2px(Vec(30.0, MODULE_HEIGHT - 94.0)), module, FivesAstableC::OFF_INPUT));
 
+        addParam(createParam<CKSS>(mm2px(Vec(28.f, MODULE_HEIGHT - 82.f)), module, FivesAstableC::OFFSET_PARAM));
 		addParam(createParamCentered<RoundLargeBlackKnob>(mm2px(Vec(11.0, MODULE_HEIGHT - 63.0)), module, FivesAstableC::PERIOD_PARAM));
 		addInput(createInputCentered<PJ301MPort>(mm2px(Vec(30.0, MODULE_HEIGHT - 63.0)), module, FivesAstableC::PERIOD_INPUT));
 

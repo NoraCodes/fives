@@ -10,6 +10,7 @@ struct FivesAstable : Module {
 	enum ParamIds {
 		ON_PARAM,
 		OFF_PARAM,
+        OFFSET_PARAM,
 		NUM_PARAMS
 	};
 	enum InputIds {
@@ -36,6 +37,7 @@ struct FivesAstable : Module {
 		config(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS);
 		configParam(ON_PARAM, 0.f, 1.f, 0.333, "On Time");
 		configParam(OFF_PARAM, 0.f, 1.f, 0.333, "Off Time");
+		configParam(OFFSET_PARAM, 0.f, 1.f, 0.f, "Voltage Offset");
         chip = new AstableChipModel(DEFAULT_R1, DEFAULT_R2, DEFAULT_C1);
 	}
 
@@ -45,8 +47,8 @@ struct FivesAstable : Module {
         chip->vReset = inputs[RESET_INPUT].getVoltage(); 
         
         chip->update(args.sampleTime);
-
-        outputs[OUT_OUTPUT].setVoltage(clamp(chip->vOut, -1.f, 10.f));
+        float offsetVout = chip->vOut + (-5.f * params[OFFSET_PARAM].getValue());
+        outputs[OUT_OUTPUT].setVoltage(clamp(offsetVout, -10.f, 10.f));
     }
 };
 
@@ -65,6 +67,8 @@ struct FivesAstableWidget : ModuleWidget {
 
 		addParam(createParamCentered<RoundBlackKnob>(mm2px(Vec(12.7, MODULE_HEIGHT - 113.5)), module,FivesAstable::ON_PARAM));
 		addParam(createParamCentered<RoundBlackKnob>(mm2px(Vec(12.7, MODULE_HEIGHT - 96.5)), module, FivesAstable::OFF_PARAM));
+
+        addParam(createParam<CKSS>(mm2px(Vec(10.f, MODULE_HEIGHT - 88.f)), module, FivesAstable::OFFSET_PARAM));
 
 		addInput(createInputCentered<PJ301MPort>(mm2px(Vec(12.7, MODULE_HEIGHT - 65.0)), module, FivesAstable::RESET_INPUT));
 		addOutput(createOutputCentered<PJ301MPort>(mm2px(Vec(12.7, MODULE_HEIGHT - 37.0)), module, FivesAstable::OUT_OUTPUT));
